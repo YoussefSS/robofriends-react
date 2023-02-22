@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import CardList from './CardList'
+import App from './App'
 import reportWebVitals from './reportWebVitals';
 import 'tachyons'
-import {robots} from './robots'; // we destructure because if you look in robots.js, it doesn't export default, meaning it can have multiple exports, so we specify which export we want
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <CardList robots={robots}/>
+    <App />
   </React.StrictMode>
 );
 
