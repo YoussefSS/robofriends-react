@@ -2,7 +2,7 @@ import React from 'react';
 import CardList from './CardList';
 import {robots} from './robots'; // we destructure because if you look in robots.js, it doesn't export default, meaning it can have multiple exports, so we specify which export we want
 import SearchBox from './SearchBox';
-
+import './App.css'
 
 class App extends React.Component {
 
@@ -31,7 +31,7 @@ class App extends React.Component {
 
         return (
             <div className='tc'> {/* Remember that you can use React.Fragment instead of divs, but we use div here as we're adding the className */}
-                <h1>RoboFriends</h1>
+                <h1 className='f1'>RoboFriends</h1>
                 <SearchBox searchChange={this.onSearchBoxChanged}/> {/* passing in a callback function as a prop */}
                 <CardList robots = {filteredRobots}/>
             </div>
