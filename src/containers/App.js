@@ -1,8 +1,8 @@
 import React from 'react';
-import CardList from './CardList';
-import SearchBox from './SearchBox';
+import CardList from '../components/CardList';
+import SearchBox from '../components/SearchBox';
+import Scroll from '../components/Scroll';
 import './App.css'
-import Scroll from './Scroll';
 
 class App extends React.Component {
 
@@ -43,11 +43,13 @@ class App extends React.Component {
     }
 
     render() {
-        const filteredRobots = this.state.robots.filter(robot => { // We can also do this by adding filteredRobots to the state, and setting it in OnSearchBoxChanged
-            return robot.name.toLowerCase().includes(this.state.searchfield.toLowerCase());
+        const {robots, searchfield} = this.state;
+
+        const filteredRobots = robots.filter(robot => { // We can also do this by adding filteredRobots to the state, and setting it in OnSearchBoxChanged
+            return robot.name.toLowerCase().includes(searchfield.toLowerCase());
         });
 
-        if(this.state.robots.length === 0) // It might take time to fetch the users from the API, so while the array is empty, show loading
+        if(robots.length === 0) // It might take time to fetch the users from the API, so while the array is empty, show loading
         {
             return <h1 className='tc'>Loading</h1>
         } else {
