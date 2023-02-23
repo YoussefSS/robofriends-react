@@ -2,7 +2,6 @@ import React from 'react';
 import Card from './Card';
 
 const CardList = ({robots}) => { // passing in robots prop (destructuring, we can just pass in props without the curly brackets)
-
     return (
         <div>
             {
