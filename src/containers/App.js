@@ -39,6 +39,17 @@ function App() {
     //     .then(users => this.setState({robots: users}));
     // }
 
+    // Converting the above componentDidMount into useEffect
+    // By default, react runs the useEffect function everytime it renders
+    // The 2nd parameter of useEffect takes in a list of variables/state that tell it when to actually run the function
+    // Passing in an empty array means: do not call useEffect if any of the state changes, instead call it the first time the page renders only, effectively making it like componentDidMount
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/users')
+        .then(response => response.json())
+        .then(users => setRobots(users));
+    }, [])
+
+  
     const onSearchBoxChanged = (event) => {
         setSearchField(event.target.value);
     }
