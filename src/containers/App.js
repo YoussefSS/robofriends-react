@@ -6,12 +6,15 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import './App.css'
 
 import { connect } from 'react-redux';
-import {setSearchField} from '../actions'
+import {setSearchField, requestRobots } from '../actions'
 
 // Tells me what piece of state I need to listen to and send down as props
 const mapStateToProps = (state) => {
     return {
-        searchField: state.searchField // we can now use this.props.searchField. We are directly using .searchField instead of searchRobots.searchField as currently there is only 1 reducer
+        searchField: state.searchRobots.searchField, // we can now use this.props.searchField
+        robots: state.requestRobots.robots,
+        isPending: state.requestRobots.isPending,
+        error: state.requestRobots.error
     }
 }
 
@@ -21,46 +24,25 @@ const mapStateToProps = (state) => {
 // This replaces the bottom onSearchBoxChange function
 const mapDispatchToProps = (dispatch) => {
    return {
-        onSearchChange: (event) => { dispatch(setSearchField(event.target.value))} // we can now use this.props.onSearchChange
+        onSearchChange: (event) => dispatch(setSearchField(event.target.value)), // we can now use this.props.onSearchChange
+        onRequestRobots: () => dispatch(requestRobots()) // This works with redux-thunk, as it's going to catch that we are returning a function (check requestRobots in actions.js)
    } 
 }
 
 class App extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {
-            robots: []
-        }
-    }
-
-    componentDidMount() { // since this is part of React.Component, we are not using arrow functions
-        
-        /* The following code makes an HTTP request to get the data from the link, then converts the data into json, then sets the state of App */
-
-        /*fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => {
-            return response.json(); // converting the response into json
-        })
-        .then(users => {
-            this.setState({robots: users});
-        });*/
-
-        // the above code can be reduced to:
-        fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => response.json()) // converting the response into json
-        .then(users => this.setState({robots: users}));
+    componentDidMount() { 
+        this.props.onRequestRobots();
     }
 
     render() {
-        const {robots} = this.state;
-        const {searchField, onSearchChange} = this.props; // searchField is now passed down as props, not as state. Same as onSearchChange
+        const {searchField, onSearchChange, robots, isPending} = this.props; // these states are now passed in as props instead of state (redux)
 
         const filteredRobots = robots.filter(robot => { // We can also do this by adding filteredRobots to the state, and setting it in OnSearchBoxChanged
             return robot.name.toLowerCase().includes(searchField.toLowerCase());
         });
 
-        if(robots.length === 0) // It might take time to fetch the users from the API, so while the array is empty, show loading
+        if(isPending) // It might take time to fetch the users from the API, so while the array is empty, show loading
         {
             return <h1 className='tc'>Loading</h1>
         } else {
